@@ -12,58 +12,76 @@ npm install --save @warren-bank/node-poloniex-api
 
 #### Usage:
 
-* factory function:
-  * input: `api_key` (required), `api_secret` (required)
-* methods (as specified in the [official API docs](https://poloniex.com/support/api/) ):
-  * public:
-    * 'get_trade_history'
-    * 'get_order_book'
-    * 'get_volume'
-    * 'get_ticker'
-    * 'get_trading_pairs'
-  * private:
-    * 'get_balances'
-    * 'get_open_orders'
-    * 'get_my_trade_history'
-    * 'buy'
-    * 'sell'
-    * 'cancel_order'
-    * 'withdraw'
-    * 'get_total_balance'
-    * 'get_total_btc_balance'
-    * 'get_total_eth_balance'
+* class constructor:
+  * input: `api_key` (required), `api_secret` (required), `config` (optional: `{agent, timeout}`)
+* `api()` method:
+  * input: `method` (required), `params` (varies by method)<br>
+    where: `method` is one of the following values (as specified in the [official API docs](https://poloniex.com/support/api/) ):
+    * public:
+      * 'returnTicker', `{}`
+      * 'return24hVolume', `{}`
+      * 'returnOrderBook', `{currencyPair, depth}`
+      * 'returnTradeHistory', `{currencyPair, start, end}`
+      * 'returnChartData', `{currencyPair, period, start, end}`
+      * 'returnCurrencies', `{}`
+      * 'returnLoanOrders', `{currency, limit}`
+    * private:
+      * 'returnBalances', `{}`
+      * 'returnCompleteBalances', `{account}`
+      * 'returnDepositAddresses', `{}`
+      * 'generateNewAddress', `{currency}`
+      * 'returnDepositsWithdrawals', `{start, end}`
+      * 'returnOpenOrders', `{currencyPair}`
+      * 'returnMyTradeHistory', `{currencyPair, start, end}`
+      * 'returnOrderTrades', `{orderNumber}`
+      * 'buy', `{currencyPair, rate, amount, fillOrKill, immediateOrCancel, postOnly}`
+      * 'sell', `{currencyPair, rate, amount, fillOrKill, immediateOrCancel, postOnly}`
+      * 'cancelOrder', `{orderNumber}`
+      * 'moveOrder', `{orderNumber, rate, amount, immediateOrCancel, postOnly}`
+      * 'withdraw', `{currency, amount, address}`
+      * 'returnFeeInfo', `{}`
+      * 'returnAvailableAccountBalances', `{account}`
+      * 'returnTradableBalances', `{}`
+      * 'transferBalance', `{currency, amount, fromAccount, toAccount}`
+      * 'returnMarginAccountSummary', `{}`
+      * 'marginBuy', `{currencyPair, rate, amount, lendingRate}`
+      * 'marginSell', `{currencyPair, rate, amount, lendingRate}`
+      * 'getMarginPosition', `{currencyPair}`
+      * 'closeMarginPosition', `{currencyPair}`
+      * 'createLoanOffer', `{currency, amount, duration, autoRenew, lendingRate}`
+      * 'cancelLoanOffer', `{orderNumber}`
+      * 'returnOpenLoanOffers', `{}`
+      * 'returnActiveLoans', `{}`
+      * 'returnLendingHistory', `{start, end, limit}`
+      * 'toggleAutoRenew', `{orderNumber}`
   * output: Promise
 
 #### Example:
 
 ```javascript
-const Poloniex = require('@warren-bank/node-poloniex-api')
-const API = Poloniex('api_key', 'api_secret')
+const PoloniexClient = require('@warren-bank/node-poloniex-api')
+const poloniex = new PoloniexClient('api_key', 'api_secret', {timeout: 10000})
 
 // Public API method: Get Ticker Info
-API.get_ticker('BTC_ETH')
+poloniex.api('returnTicker')
 .then((result) => {
-  console.log('Ticker (BTC_ETH):', result)
+  console.log('Ticker:', result)
 })
 .catch((error) => {
   console.log('Error:', error.message)
 })
 
-// Private API method: Display user's balance
-API.get_balances()
+// Private API method: Display User's Balances
+poloniex.api('returnBalances')
 .then((result) => {
-  console.log('Balance:', result)
+  console.log('Balances:', result)
 })
 .catch((error) => {
   console.log('Error:', error.message)
 })
 ```
 
-#### Credits:
-
-* The [PHP](https://pastebin.com/iuezwGRZ) client library was used for reference
-
 #### Legal:
 
 * copyright: [Warren Bank](https://github.com/warren-bank)
-* license: [GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt)
+* license: [GPL-2.0](https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt)

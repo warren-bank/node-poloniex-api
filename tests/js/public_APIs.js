@@ -1,34 +1,38 @@
 #!/usr/bin/env node
 
-const Poloniex = require('../../poloniex')
+const PoloniexClient = require('../../poloniex')
 
-const API = Poloniex('my_key', 'my_secret')
+const poloniex = new PoloniexClient('my_key', 'my_secret', {timeout: 10000})
 
 // public API methods
 
-const pair = 'BTC_ETH'
+const currency = 'BTC'
+const currencyPair = 'BTC_ETH'
+const now_ms = Date.now()
+const now = Math.floor(now_ms / 1000)
 
-API.get_trade_history(pair)
-.then((data) => {
-  console.log("\n\n", `Trade History (${pair}):`, "\n", data)
-})
+var methods, i
 
-API.get_order_book(pair)
-.then((data) => {
-  console.log("\n\n", `Order Book (${pair}):`, "\n", data)
-})
+const call_API = function(method, params){
+  poloniex.api(method, params)
+  .then((result) => {
+    console.log("\n\n", `[Success] API method "${method}" returned the following response:`, "\n", JSON.stringify(result))
+  })
+  .catch((error) => {
+    console.log("\n\n", `[Error] API method "${method}" produced the following error message:`, "\n", error.message)
+  })
+}
 
-API.get_ticker(pair)
-.then((data) => {
-  console.log("\n\n", `Ticker (${pair}):`, "\n", data)
-})
+methods = ['return24hVolume', 'returnCurrencies']
+for (i=0; i<methods.length; i++){
+  call_API(methods[i])
+}
 
-API.get_volume()
-.then((data) => {
-  console.log("\n\n", 'Volume:', "\n", data)
-})
+methods = ['returnOrderBook', 'returnTradeHistory']
+for (i=0; i<methods.length; i++){
+  call_API(methods[i], {currencyPair})
+}
 
-API.get_trading_pairs()
-.then((data) => {
-  console.log("\n\n", 'Trading Pairs:', "\n", data)
-})
+// require unique params
+call_API('returnLoanOrders', {currency})
+call_API('returnChartData', {currencyPair, period:300, start:(now-1200), end:now})
