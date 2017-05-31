@@ -1,0 +1,24 @@
+{
+  "name": "@warren-bank/node-poloniex-api",
+  "version": "1.0.0",
+  "main": "poloniex.js",
+  "description": "poloniex.com API client library for Node.js",
+  "author": "Warren Bank (https://github.com/warren-bank)",
+  "license": "GPL-2.0",
+  "dependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/warren-bank/node-poloniex-api"
+  },
+  "keywords": [
+    "poloniex",
+    "api",
+    "btc",
+    "bitcoin",
+    "eth",
+    "ether",
+    "crypto-currency",
+    "exchange"
+  ]
+}
