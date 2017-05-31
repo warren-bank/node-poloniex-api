@@ -17,21 +17,21 @@ function Poloniex(api_key, api_secret, opt){
   var self = this
 
   var config = Object.assign({},
-	{
-		// default user-configurable options
-		agent: false,
-		timeout: 5000
-	},
-	(opt || {}),
-	{
-		// values that cannot be changed by user
+  {
+    // default user-configurable options
+    agent: false,
+    timeout: 5000
+  },
+  (opt || {}),
+  {
+    // values that cannot be changed by user
     urls: {
       public_API: 'https://poloniex.com:443/public',
       trading_API: 'https://poloniex.com:443/tradingApi'
     },
-		api_key: api_key,
-		api_secret: api_secret
-	})
+    api_key: api_key,
+    api_secret: api_secret
+  })
 
   var HMAC_SHA512, nonce, send_POST_request, send_GET_request, api
 
