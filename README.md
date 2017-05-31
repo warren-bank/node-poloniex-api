@@ -55,6 +55,42 @@ npm install --save @warren-bank/node-poloniex-api
       * 'returnLendingHistory', `{start, end, limit}`
       * 'toggleAutoRenew', `{orderNumber}`
   * output: Promise
+* `helper` library methods:
+  * `helper.get_ticker(currencyPair)`
+    * input: `currencyPair`
+    * output: Promise
+    * behavior:
+      * call `api('returnTicker')`
+      * filter response hash table by key: `currencyPair`
+      * return filtered hash table
+  * `helper.get_trading_pairs()`
+    * input:
+    * output: Promise
+    * behavior:
+      * call `api('returnTicker')`
+      * return array of keys in response hash table
+  * `helper.get_total_balance(currency)`
+    * input: currency
+    * output: Promise
+    * behavior:
+      * call `api('returnBalances')`
+      * call `api('returnTicker')`
+      * for each coin having a balance:
+        * add to sum: value of coin in `currency`, based on its current ticker price
+        * call `api('returnOpenOrders', {currencyPair})`
+        * for each open order:
+          * add to sum: the value of the order in `currency`
+      * return sum
+  * `helper.get_total_btc_balance()`
+    * input:
+    * output: Promise
+    * behavior:
+      * call `helper.get_total_balance('BTC')`
+  * `helper.get_total_eth_balance()`
+    * input:
+    * output: Promise
+    * behavior:
+      * call `helper.get_total_balance('ETH')`
 
 #### Example:
 
