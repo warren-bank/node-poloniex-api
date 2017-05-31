@@ -17,7 +17,7 @@ var Poloniex = function(api_key, api_secret){
   HMAC_SHA512 = function(POST_str){
     var hmac, signed
     hmac = crypto.createHmac("sha512", api_secret)
-    signed = hmac.update(new Buffer(POST, 'utf-8')).digest("base64")
+    signed = hmac.update(new Buffer(POST_str, 'utf-8')).digest("base64")
     return signed
   }
 
