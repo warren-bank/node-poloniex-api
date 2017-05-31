@@ -232,8 +232,12 @@ var Poloniex = function(api_key, api_secret){
       })
     },
 
-    "get_total_btc_balance": function(){
+    "get_total_balance": function(currency){
       var balances, prices
+
+      if (! currency) return Promise.reject(new Error('"get_total_balance(currency)" called with missing parameter: "currency"'))
+
+      currency = currency.toUpperCase()
 
       return $poloniex.get_balances()
       .then((_balances) => {
@@ -245,28 +249,29 @@ var Poloniex = function(api_key, api_secret){
         prices = _prices ? _prices : {}
       })
       .then(() => {
-        var tot_btc, promises, pairs, coin, amount, pair, open_orders, order
+        var total_balance, promises, pairs, coin, amount, pair, open_orders, order
         var i, j
 
-        tot_btc = 0
+        total_balance = 0
         promises = []
         pairs = []
         for (coin in balances){
           amount = balances[coin]
-          pair = `BTC_${coin}`.toUpperCase()
+          coin = coin.toUpperCase()
+          pair = `${currency}_${coin}`
 
           // convert coin balances to btc value
           if (amount > 0){
-            if ((coin !== 'BTC') && (prices[pair])){
-              tot_btc += (amount * prices[pair])
+            if ((coin !== currency) && (prices[pair])){
+              total_balance += (amount * prices[pair])
             }
-            else if (coin === 'BTC'){
-              tot_btc += amount
+            else if (coin === currency){
+              total_balance += amount
             }
           }
 
           // process open orders
-          if (coin !== 'BTC'){
+          if (coin !== currency){
             promises.push($poloniex.get_open_orders(pair))
             pairs.push(pair)
           }
@@ -274,7 +279,7 @@ var Poloniex = function(api_key, api_secret){
         }
 
         if (promises.length === 0){
-          return tot_btc
+          return total_balance
         }
         else {
           return Promise.all(promises)
@@ -285,18 +290,26 @@ var Poloniex = function(api_key, api_secret){
               for (j=0; j<open_orders.length; j++){
                 order = open_orders[j]
                 if (order['type'] === 'buy'){
-                  tot_btc += order['total']
+                  total_balance += order['total']
                 }
                 else if ((order['type'] === 'sell') && (prices[pair])){
-                  tot_btc += (order['amount'] * prices[pair])
+                  total_balance += (order['amount'] * prices[pair])
                 }
               }
             }
-            return tot_btc
+            return total_balance
           })
         }
 
       })
+    },
+
+    "get_total_btc_balance": function(){
+      return $poloniex.get_total_balance('BTC')
+    },
+
+    "get_total_eth_balance": function(){
+      return $poloniex.get_total_balance('ETH')
     }
 
   }

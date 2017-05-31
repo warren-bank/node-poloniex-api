@@ -29,7 +29,9 @@ npm install --save @warren-bank/node-poloniex-api
     * 'sell'
     * 'cancel_order'
     * 'withdraw'
+    * 'get_total_balance'
     * 'get_total_btc_balance'
+    * 'get_total_eth_balance'
   * output: Promise
 
 #### Example:
