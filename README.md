@@ -61,8 +61,7 @@ npm install --save @warren-bank/node-poloniex-api
     * output: Promise
     * behavior:
       * call `api('returnTicker')`
-      * filter response hash table by key: `currencyPair`
-      * return filtered hash table
+      * return value in response hash table for the key: `currencyPair`
   * `helper.get_trading_pairs()`
     * input:
     * output: Promise

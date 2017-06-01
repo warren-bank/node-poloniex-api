@@ -184,12 +184,8 @@ function Poloniex(api_key, api_secret, opt){
 
       return self.api('returnTicker')
       .then((data) => {
-        currencyPair = currencyPair ? currencyPair.toUpperCase() : 'ALL'
         if (! data){
           throw new Error('server response is empty')
-        }
-        else if (currencyPair === 'ALL'){
-          return data
         }
         else if (data[currencyPair]) {
           return data[currencyPair]
