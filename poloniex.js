@@ -12,7 +12,7 @@ const querystring = require('querystring')
 
 function Poloniex(api_key, api_secret, opt){
   if (! this instanceof Poloniex){
-    return new Poloniex(api_key, api_secret)
+    return new Poloniex(api_key, api_secret, opt)
   }
   var self = this
 

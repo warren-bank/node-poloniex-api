@@ -1,6 +1,6 @@
 {
   "name": "@warren-bank/node-poloniex-api",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "main": "poloniex.js",
   "description": "poloniex.com API client library for Node.js",
   "author": "Warren Bank (https://github.com/warren-bank)",
