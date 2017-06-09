@@ -72,6 +72,7 @@ function Poloniex(api_key, api_secret, opt){
         headers: {
           Key: config.api_key,
           Sign: HMAC_SHA512(POST_data),
+          "Content-Length": Buffer.byteLength(POST_data, 'utf8'),
           "User-Agent": `Mozilla/4.0 (compatible; Poloniex Node.js bot; ${process.platform}; Node.js/${process.version})`
         },
         agent: config.agent,
