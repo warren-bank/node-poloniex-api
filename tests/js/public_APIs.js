@@ -20,6 +20,8 @@ const call_API = function(method, params){
   })
   .catch((error) => {
     console.log("\n\n", `[Error] API method "${method}" produced the following error message:`, "\n", error.message)
+    if (error.code === 'JSON-PARSE') console.log('Server response:', "\n", error.api_response)
+    if (error.code === 'ECONNRESET') console.log('Server timeout')
   })
 }
 

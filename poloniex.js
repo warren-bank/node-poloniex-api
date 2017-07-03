@@ -88,13 +88,18 @@ function Poloniex(api_key, api_secret, opt){
             data += chunk
           });
           res.on('end', () => {
-            data = JSON.parse(data)
+            try {
+              data = JSON.parse(data)
+            }
+            catch(error) {
+              error.code = 'JSON-PARSE'
+              error.api_response = data
+              return reject(error)
+            }
             if (data && data.error){
-              reject(new Error(data.error))
+              return reject(new Error(data.error))
             }
-            else {
-              resolve(data)
-            }
+            resolve(data)
           });
         })
 
